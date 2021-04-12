@@ -112,7 +112,7 @@ cusip_lookup['037833100'] = 'AAPL'
 cusip_lookup['037833100']
 
 # Closing price for day before
-day_before_closing_price_date = closing_price_date - timedelta(days=1)
+day_before_closing_price_date = 'closing_price_date' - timedelta(days=1)
 
 # Safely print closing price day before or None if it's missing
 print(alphabet_hist.get('Alphabet'))
