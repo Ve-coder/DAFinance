@@ -1,5 +1,11 @@
 import pandas as pd
 
+data=pd.read_csv("sales_subset.csv")
+
+print(data.info())
+
+print(data.head())
+
 # Print the head of the sales DataFrame
 print(sales.head())
 
