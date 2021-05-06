@@ -1,3 +1,11 @@
+import pandas as pd
+
+object = pd.read_pickle(r'ward.p')
+
+object2 = pd.read_pickle(r'licenses.p')
+
+print(object.head())
+
 # Merge the taxi_owners and taxi_veh tables setting a suffix
 taxi_own_veh = taxi_owners.merge(taxi_veh, on='vid', suffixes=('_own','_veh'))
 
@@ -5,7 +13,7 @@ taxi_own_veh = taxi_owners.merge(taxi_veh, on='vid', suffixes=('_own','_veh'))
 print(taxi_own_veh['fuel_type'].value_counts())
 
 # Merge the wards and census tables on the ward column
-wards_census = wards.merge(census, on='ward')
+wards_census = wards_altered.merge(census, on='ward')
 
 # Print the shape of wards_census
 print('wards_census table shape:', wards_census.shape)
@@ -20,15 +28,15 @@ wards_altered_census = wards_altered.merge(census, on='ward')
 print('wards_altered_census table shape:', wards_altered_census.shape)
 
 # Print the first few rows of the census_altered table to view the change
-print(census_altered[['ward']].head())
+print(census[['ward']].head())
 
 # Merge the wards and census_altered tables on the ward column
-wards_census_altered = wards.merge(census_altered, on='ward')
+wards_census_altered = wards_altered.merge(census, on='ward')
 
 # Print the shape of wards_census_altered
 print('wards_census_altered table shape:', wards_census_altered.shape)
 # Merge the licenses and biz_owners table on account
-licenses_owners = licenses.merge(biz_owners, on='account')
+licenses_owners = licenses_owners.merge(biz_owners, on='account')
 
 # Group the results by title then count the number of accounts
 counted_df = licenses_owners.groupby('title').agg({'account':'count'})
@@ -40,7 +48,7 @@ sorted_df = counted_df.sort_values(by='account', ascending=False)
 print(sorted_df.head())
 
 # Merge the ridership, cal, and stations tables
-ridership_cal_stations = ridership.merge(cal, on=['year','month','day']) \
+ridership_cal_stations = ridership_cal_stations.merge(cal, on=['year','month','day']) \
 							.merge(stations, on='station_id')
 
 # Create a filter to filter ridership_cal_stations
@@ -52,18 +60,18 @@ filter_criteria = ((ridership_cal_stations['month'] == 7)
 print(ridership_cal_stations.loc[filter_criteria, 'rides'].sum())
 
 # Merge licenses and zip_demo, on zip; and merge the wards on ward
-licenses_zip_ward = licenses.merge(zip_demo, on='zip') \
-            			.merge(wards, on='ward')
+licenses_zip_ward = licenses_owners.merge(zip_demo, on='zip') \
+            			.merge(wards_altered, on='ward')
 
 # Print the results by alderman and show median income
 print(licenses_zip_ward.groupby('alderman').agg({'income':'median'}))
 
 # Merge land_use and census and merge result with licenses including suffixes
 land_cen_lic = land_use.merge(census, on='ward') \
-                    .merge(licenses, on='ward', suffixes=('_cen','_lic'))
+                    .merge(licenses_owners, on='ward', suffixes=('_cen','_lic'))
 # Merge land_use and census and merge result with licenses including suffixes
 land_cen_lic = land_use.merge(census, on='ward') \
-                    .merge(licenses, on='ward', suffixes=('_cen','_lic'))
+                    .merge(licenses_owners, on='ward', suffixes=('_cen','_lic'))
 
 # Group by ward, pop_2010, and vacant, then count the # of accounts
 pop_vac_lic = land_cen_lic.groupby(['ward','pop_2010','vacant'],
@@ -71,7 +79,7 @@ pop_vac_lic = land_cen_lic.groupby(['ward','pop_2010','vacant'],
 
 # Merge land_use and census and merge result with licenses including suffixes
 land_cen_lic = land_use.merge(census, on='ward') \
-                    .merge(licenses, on='ward', suffixes=('_cen','_lic'))
+                    .merge(licenses_owners, on='ward', suffixes=('_cen','_lic'))
 
 # Group by ward, pop_2010, and vacant, then count the # of accounts
 pop_vac_lic = land_cen_lic.groupby(['ward','pop_2010','vacant'],
